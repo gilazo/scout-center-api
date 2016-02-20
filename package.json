@@ -1,0 +1,26 @@
+{
+  "name": "scout-center-api",
+  "version": "0.0.1",
+  "description": "An api for tracking advancements of scouts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gilazo/scout-center-api.git"
+  },
+  "author": "gilazo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gilazo/scout-center-api/issues"
+  },
+  "homepage": "https://github.com/gilazo/scout-center-api#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "supertest": "^1.2.0"
+  }
+}
