@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node src/app/server.js --harmony",
-    "test": "mocha test"
+    "test": "mocha src/test/**"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/gilazo/scout-center-api#readme",
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "promise": "^7.1.1"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",
