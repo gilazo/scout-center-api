@@ -8,6 +8,9 @@ describe('user router', () => {
         getUser: (username, callback) => {
             callback({ username: 'test@test.com' });
         },
+        getUserRanks: (id, callback) => {
+            callback([{ name: 'purple' }]);  
+        },
         getUsers: (id, callback) => {
             callback([{ username: 'friend@test.com' }]);
         },
@@ -33,6 +36,18 @@ describe('user router', () => {
                 
                 done(); 
             });
+    });
+    
+    it('should handle a GET /ranks request', done => {
+        request
+            .get('/ranks')
+            .expect('Content-Type', /json/)
+            .expect(302, [{ name: 'purple' }])
+            .end(err => {
+                if (err) return done(err);
+                
+                done();
+            }); 
     });
     
     it('should handle a GET /friends request', done => {

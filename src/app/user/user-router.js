@@ -14,6 +14,13 @@ module.exports = () => {
             });
     });
     
+    app.get('/ranks', (req, res) => {
+        repository
+            .getUserRanks(req.id, ranks => {
+                res.status(302).send(ranks);         
+            });
+    });
+    
     app.get('/friends', (req, res) => {
         repository
             .getUsers(req.id, friends => {

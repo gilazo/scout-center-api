@@ -1,12 +1,17 @@
 module.exports = {
     getUser: getUser,
+    getUserRanks: getUserRanks,
     getUsers: getUsers,
     addUser: addUser,
-    updateUser: updateUser
+    updateUser: updateUser    
 };
 
 function getUser(username, callback) {
     callback({});
+}
+
+function getUserRanks(id, callback) {
+    callback([{}]);
 }
 
 function getUsers(id, callback) {

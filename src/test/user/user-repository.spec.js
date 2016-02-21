@@ -5,6 +5,7 @@ describe('user repository', () => {
     it('should get the user by username', done => {
         repository.getUser('test@test.com', user => {
             expect(user).to.eql({});
+            
             done();
         });
     });
@@ -12,7 +13,16 @@ describe('user repository', () => {
     it('should get a list of users by current user id', done => {
         repository.getUsers(123, users => {
             expect(users[0]).to.eql({});
+            
             done();
+        });
+    });
+    
+    it('should get a list of ranks for the current user', done => {
+        repository.getUserRanks(123, ranks => {
+            expect(ranks[0]).to.eql({});
+            
+            done(); 
         });
     });
     
