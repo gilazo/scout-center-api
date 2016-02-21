@@ -10,6 +10,12 @@ describe('user router', () => {
         },
         getUsers: (id, callback) => {
             callback([{ username: 'friend@test.com' }]);
+        },
+        addUser: (user, callback) => {
+            callback();
+        },
+        updateUser: (user, callback) => {
+            callback();
         }
     };
     
@@ -29,11 +35,35 @@ describe('user router', () => {
             });
     });
     
-    it('should hand a GET /friends request', done => {
+    it('should handle a GET /friends request', done => {
         request
             .get('/friends')
             .expect('Content-Type', /json/)
             .expect(302, [ { username: 'friend@test.com'} ])
+            .end(err => {
+                if (err) return done(err);
+                
+                done();
+            });
+    });
+    
+    it('should handle a POST request', done => {
+        request
+            .post('/')
+            .send({ username: 'john@test.com' })
+            .expect(201)
+            .end(err => {
+                if (err) return done(err);
+                
+                done();
+            }); 
+    });
+    
+    it('should handle a PUT request', done => {
+        request
+            .put('/')
+            .send({ username: 'john@test.com' })
+            .expect(200)
             .end(err => {
                 if (err) return done(err);
                 

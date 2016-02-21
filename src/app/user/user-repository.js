@@ -1,6 +1,8 @@
 module.exports = {
     getUser: getUser,
-    getUsers: getUsers   
+    getUsers: getUsers,
+    addUser: addUser,
+    updateUser: updateUser
 };
 
 function getUser(username, callback) {
@@ -9,4 +11,12 @@ function getUser(username, callback) {
 
 function getUsers(id, callback) {
     callback([{}]);
+}
+
+function addUser(user, callback) {
+    callback();
+}
+
+function updateUser(user, callback) {
+    callback();
 }
