@@ -15,7 +15,14 @@ describe('app', () => {
         return mockApp;
     };
     
+    var mockAuthorizationService = {
+        authorize: (credentials, callback) => {
+            callback(false);
+        }
+    };
+    
     app.__set__('userRouter', mockUserRouter());
+    app.__set__('authorizationService', mockAuthorizationService);
     
     request = request(app());
     

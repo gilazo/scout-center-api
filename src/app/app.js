@@ -11,7 +11,9 @@ module.exports = () => {
         if (req.path !== '/user' && req.method !== 'POST') {
             authorizationService.authorize(auth(req), authorized => {
                 if (authorized === false) {
-                    return res.status(401).send();
+                    res.status(401).send();
+                    
+                    next('unauthorized');
                 }                
             });    
         }        
@@ -21,6 +23,10 @@ module.exports = () => {
 
     app.use('/user', userRouter);
     app.use('/ranks', rankRouter);
+    
+    app.use((err, req, res, next) => {
+        console.log(err);        
+    });
     
     return app;
 };
