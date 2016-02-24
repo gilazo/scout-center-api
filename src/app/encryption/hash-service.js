@@ -1,8 +1,6 @@
 const crypto = require('crypto');
 
-module.exports = () => {
-    const hash = crypto.createHash('md5');
-    
+module.exports = () => {    
     const service = {
         hashValue: hashValue
     };
@@ -10,6 +8,6 @@ module.exports = () => {
     return service;
     
     function hashValue(value) {
-        return hash.update(value).digest('hex');
+        return crypto.createHash('md5').update(value).digest('hex');
     }
 };

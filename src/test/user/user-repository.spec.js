@@ -56,7 +56,7 @@ describe('user repository', () => {
     });
     
     it('should add a new user', done => {
-        repository.addUser({ email: 'test@test.com' }, err => {
+        repository.addUser({ email: 'test@test.com', password: '123' }, err => {
             if (err) return done(err);                       
             
             expect(spy.called).to.equal(true);
