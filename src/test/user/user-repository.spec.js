@@ -1,4 +1,4 @@
-var expect = require('expect.js');
+var expect = require('chai').expect;
 var rewire = require('rewire');
 var sinon = require('sinon');
 var User = require('../../app/user/user-model');
@@ -31,9 +31,9 @@ describe('user repository', () => {
     
     repository = repository();
     
-    it('should get the user by username', done => {
+    it('should get the user by email', done => {
         repository.getUser('test@test.com', user => {
-            expect(user).to.eql({});
+            expect(user).to.deep.equal({});
             
             done();
         });
@@ -41,7 +41,7 @@ describe('user repository', () => {
     
     it('should get a list of users by current user id', done => {
         repository.getUsers(123, users => {
-            expect(users[0]).to.eql({});
+            expect(users[0]).to.deep.equal({});
             
             done();
         });
@@ -49,27 +49,27 @@ describe('user repository', () => {
     
     it('should get a list of ranks for the current user', done => {
         repository.getUserRanks(123, ranks => {
-            expect(ranks[0]).to.eql({});
+            expect(ranks[0]).to.deep.equal({});
             
             done(); 
         });
     });
     
     it('should add a new user', done => {
-        repository.addUser({ username: 'test@test.com' }, err => {
+        repository.addUser({ email: 'test@test.com' }, err => {
             if (err) return done(err);                       
             
-            expect(spy.called).to.be(true);
+            expect(spy.called).to.equal(true);
             
             done(); 
         });
     });
     
     it('should update a user', done => {
-        repository.updateUser({ username: 'test@test.com'}, err => {
+        repository.updateUser({ email: 'test@test.com'}, err => {
             if (err) return done(err);
             
-            expect(err).to.be(undefined);
+            expect(err).to.equal(undefined);
             
             done(); 
         });

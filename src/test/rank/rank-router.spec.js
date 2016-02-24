@@ -1,4 +1,4 @@
-var expect = require('expect.js');
+var expect = require('chai').expect;
 var request = require('supertest');
 var rewire = require('rewire');
 var router = rewire('../../app/rank/rank-router');
