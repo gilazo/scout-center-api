@@ -1,7 +1,7 @@
-const crypto = require('crypto');
+var crypto = require('crypto');
 
 module.exports = () => {    
-    const service = {
+    var service = {
         hashValue: hashValue
     };
     
