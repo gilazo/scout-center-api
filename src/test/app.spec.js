@@ -5,7 +5,7 @@ var express = require('express');
 var app = rewire('../app/app');
 
 describe('app', () => {
-    var mockUserRouter = () => {                
+    var mockUserHandler = () => {                
         var mockApp = express();        
         
         mockApp.post('/', (req, res) => {
@@ -21,7 +21,7 @@ describe('app', () => {
         }
     };
     
-    app.__set__('userRouter', mockUserRouter());
+    app.__set__('userHandler', mockUserHandler());
     app.__set__('authorizationService', mockAuthorizationService);
     
     request = request(app());

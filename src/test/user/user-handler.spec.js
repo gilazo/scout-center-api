@@ -1,30 +1,37 @@
 var expect = require('chai').expect;
 var request = require('supertest');
 var rewire = require('rewire');
-var router = rewire('../../app/user/user-router');
+var handler = rewire('../../app/user/user-handler');
 
-describe('user router', () => {        
-    var mockUserRepository = {
-        getUser: (username, callback) => {
-            callback({ username: 'test@test.com' });
-        },
-        getUserRanks: (id, callback) => {
-            callback([{ name: 'purple' }]);  
-        },
-        getUsers: (id, callback) => {
-            callback([{ username: 'friend@test.com' }]);
-        },
-        addUser: (user, callback) => {
+describe('user handler', () => {    
+    var mockUser = function User() {
+        this.save = callback => {
             callback();
-        },
-        updateUser: (user, callback) => {
-            callback();
+        };
+    };
+    var mockDb = {
+        connect: () => { },
+        connection: {
+            close: () => { }
+        }
+    };
+    var mockHashService = {
+        hashValue: value => {
+            return value;
+        }
+    };
+    var mockSaltService = {
+        getSalt: () => {
+            return '123';
         }
     };
     
-    router.__set__('repository', mockUserRepository); 
-    
-    request = request(router());
+    handler.__set__('User', mockUser);
+    handler.__set__('db', mockDb);
+    handler.__set__('hashService', mockHashService);
+    handler.__set__('saltService', mockSaltService);
+           
+    request = request(handler());
      
     it('should handle a GET / request', done => {
         request
@@ -54,7 +61,7 @@ describe('user router', () => {
         request
             .get('/friends')
             .expect('Content-Type', /json/)
-            .expect(302, [ { username: 'friend@test.com'} ])
+            .expect(302, [{ username: 'friend@test.com'}])
             .end(err => {
                 if (err) return done(err);
                 
@@ -65,7 +72,7 @@ describe('user router', () => {
     it('should handle a POST request', done => {
         request
             .post('/')
-            .send({ username: 'john@test.com' })
+            .send({ username: 'john@test.com', password: '123' })
             .expect(201)
             .end(err => {
                 if (err) return done(err);
