@@ -1,5 +1,5 @@
 var expect = require('expect.js');
-var repository = require('../../app/user/user-repository.js');
+var repository = require('../../app/user/user-repository.js')();
 
 describe('user repository', () => {   
     it('should get the user by username', done => {

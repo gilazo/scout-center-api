@@ -1,6 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var repository = require('./user-repository');
+var repository = require('./user-repository')();
 
 module.exports = () => {
     var app = express();

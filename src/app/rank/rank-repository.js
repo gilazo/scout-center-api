@@ -1,7 +1,11 @@
-module.exports = {
-    getRanks: getRanks
+module.exports = () => {
+    var service = {
+        getRanks: getRanks
+    };
+    
+    return service;
+    
+    function getRanks(callback) {
+        callback([{}]);
+    }    
 };
-
-function getRanks(callback) {
-    callback([{}]);
-}

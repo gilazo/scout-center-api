@@ -1,5 +1,5 @@
 var expect = require('expect.js');
-var service = require('../../app/authorization/authorization-service');
+var service = require('../../app/authorization/authorization-service')();
 
 describe('authorization service', () => {
     it('should return true if request is authorized', done => {

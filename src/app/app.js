@@ -1,6 +1,6 @@
 var express = require('express');
 var auth = require('basic-auth');
-var authorizationService = require('./authorization/authorization-service');
+var authorizationService = require('./authorization/authorization-service')();
 var userRouter = require('./user/user-router')();
 var rankRouter = require('./rank/rank-router')();
 
