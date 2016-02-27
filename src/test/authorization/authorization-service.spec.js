@@ -3,7 +3,7 @@ var rewire = require('rewire');
 var authorizationService = rewire('../../app/authorization/authorization-service');
 
 describe('authorization service', () => {
-    const container = { 
+    var container = { 
         config: {
             db: {
                 url: ''
@@ -31,7 +31,7 @@ describe('authorization service', () => {
         }
     };
     authorizationService.__set__('User', MockUser);
-    const service = authorizationService(container);    
+    var service = authorizationService(container);    
     
     it('should return true if request is authorized', done => {
         service.authorize({ name: 'scout', pass: 'boy123' }, authorized => {

@@ -1,37 +1,41 @@
 var expect = require('chai').expect;
 var request = require('supertest');
 var rewire = require('rewire');
+var express = require('express');
+var bodyParser = require('body-parser');
 var handler = rewire('../../app/user/user-handler');
 
-describe('user handler', () => {    
-    var mockUser = function User() {
+describe('user handler', () => {
+    var container = { 
+        config: {
+            db: {
+                url: ''
+            }
+        },
+        db: {
+            connect: () => { },
+            connection: {
+                close: () => { }
+            }
+        },
+        hashService: {
+            hashValue: value => { return value; }
+        },
+        saltService: {
+            getSalt: () => { return '123'; }
+        },
+        express: express,
+        bodyParser: bodyParser
+    }; 
+    var MockUser = function User() {
         this.save = callback => {
             callback();
         };
-    };
-    var mockDb = {
-        connect: () => { },
-        connection: {
-            close: () => { }
-        }
-    };
-    var mockHashService = {
-        hashValue: value => {
-            return value;
-        }
-    };
-    var mockSaltService = {
-        getSalt: () => {
-            return '123';
-        }
-    };
+    };    
     
-    handler.__set__('User', mockUser);
-    handler.__set__('db', mockDb);
-    handler.__set__('hashService', mockHashService);
-    handler.__set__('saltService', mockSaltService);
+    handler.__set__('User', MockUser);
            
-    request = request(handler());
+    request = request(handler(container));
      
     it('should handle a GET / request', done => {
         request

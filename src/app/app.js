@@ -1,14 +1,23 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 var config = require('./config.json');
 var auth = require('basic-auth');
 var db = require('mongoose');
 var hashService = require('./encryption/hash-service')();
+var saltService = require('./encryption/salt-service')();
 var authorizationService = require('./authorization/authorization-service')({ 
         config: config, 
         hashService: hashService,
         db: db
     });
-var userHandler = require('./user/user-handler')();
+var userHandler = require('./user/user-handler')({
+    express: express,
+    config: config,
+    hasService: hashService,
+    saltService: saltService,
+    db: db,
+    bodyParser: bodyParser
+});
 var rankRouter = require('./rank/rank-router')();
 
 module.exports = () => {

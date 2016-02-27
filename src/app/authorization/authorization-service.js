@@ -1,9 +1,9 @@
 var User = require('../user/user-model');
 
 module.exports = deps => {
-    const config = deps.config;
-    const db = deps.db;
-    const hashService = deps.hashService;
+    var config = deps.config;
+    var db = deps.db;
+    var hashService = deps.hashService;
     
     var service = {
         authorize: authorize  

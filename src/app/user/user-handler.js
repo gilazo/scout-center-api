@@ -1,13 +1,12 @@
-var express = require('express');
-var db = require('mongoose');
-var bodyParser = require('body-parser');
-var config = require('../config.json');
-var hashService = require('../encryption/hash-service')();
-var saltService = require('../encryption/salt-service')();
 var User = require('./user-model');
 
-module.exports = () => {
-    var app = express();
+module.exports = deps => {
+    var app = deps.express();
+    var bodyParser = deps.bodyParser;
+    var db = deps.db;
+    var hashService = deps.hashService;
+    var saltService = deps.saltService;
+    var config = deps.config;
     
     app.use(bodyParser.json());
     
