@@ -1,6 +1,13 @@
 var express = require('express');
+var config = require('./config.json');
 var auth = require('basic-auth');
-var authorizationService = require('./authorization/authorization-service')();
+var db = require('mongoose');
+var hashService = require('./encryption/hash-service')();
+var authorizationService = require('./authorization/authorization-service')({ 
+        config: config, 
+        hashService: hashService,
+        db: db
+    });
 var userHandler = require('./user/user-handler')();
 var rankRouter = require('./rank/rank-router')();
 
@@ -11,14 +18,16 @@ module.exports = () => {
         if (req.path !== '/user' && req.method !== 'POST') {
             authorizationService.authorize(auth(req), authorized => {
                 if (authorized === false) {
-                    res.status(401).send();
+                    res.status(401).end();
                     
-                    next('unauthorized');
-                }                
+                    return next('unauthorized');
+                } else {
+                    next();
+                }               
             });    
-        }        
-        
-        next();  
+        } else {
+            next(); 
+        }                       
     });
 
     app.use('/user', userHandler);
