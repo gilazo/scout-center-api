@@ -6,6 +6,7 @@ var db = require('mongoose');
 var hashService = require('./encryption/hash-service')();
 var saltService = require('./encryption/salt-service')();
 var authorizationService = require('./authorization/authorization-service')({ 
+        auth: auth,
         config: config, 
         hashService: hashService,
         db: db
@@ -25,7 +26,7 @@ module.exports = () => {
     
     app.use((req, res, next) => {
         if (req.path !== '/user' && req.method !== 'POST') {
-            authorizationService.authorize(auth(req), authorized => {
+            authorizationService.authorize(req, authorized => {
                 if (authorized === false) {
                     res.status(401).end();
                     

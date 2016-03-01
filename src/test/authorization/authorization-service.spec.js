@@ -21,7 +21,11 @@ describe('authorization service', () => {
                 
                 return '';    
             }
-        }
+        },
+        auth: request => { 
+            if (!request) return null;
+            
+            return { name: 'scout', pass: 'boy123' }; }
     };
     var MockUser = {
         findOne: (params, callback) => {

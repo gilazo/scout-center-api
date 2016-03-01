@@ -1,17 +1,21 @@
 var User = require('../user/user-model');
 
 module.exports = deps => {
+    var auth = deps.auth;
     var config = deps.config;
     var db = deps.db;
     var hashService = deps.hashService;
     
     var service = {
-        authorize: authorize  
+        authorize: authorize,
+        getCurrentUser: getCurrentUser
     };
     
     return service;
   
-    function authorize(credentials, callback) {
+    function authorize(req, callback) {
+        var credentials = getCurrentUser(req);
+        
         if (!credentials || !credentials.name || !credentials.pass) return callback(false);
         
         db.connect(config.db.url);
@@ -28,5 +32,9 @@ module.exports = deps => {
             
             callback(true);
         });
-    }    
+    }
+    
+    function getCurrentUser(req) {        
+        return auth(req);
+    }
 };
