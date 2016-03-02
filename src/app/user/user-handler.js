@@ -3,15 +3,28 @@ var User = require('./user-model');
 module.exports = deps => {
     var app = deps.express();
     var bodyParser = deps.bodyParser;
-    var db = deps.db;
     var hashService = deps.hashService;
     var saltService = deps.saltService;
-    var config = deps.config;
+    var decryptService = deps.decryptService;
     
     app.use(bodyParser.json());
     
     app.get('/', (req, res) => {
-        res.status(302).send({ username: 'test@test.com' });
+        decryptService.decryptAuthorizationHeader(req, credentials => {
+            if (!credentials) return res.status(404).end();                        
+
+            User.findOne({ 'username': credentials.name }, (err, user) => {
+                if (err || !user) return res.status(404).end();
+                
+                user = user.toObject();
+                
+                ['salt', 'password']
+                    .filter(property => user.hasOwnProperty(property))
+                    .forEach(property => delete user[property]);                    
+                
+                res.status(302).send(user); 
+            });
+        }); 
     });
     
     app.get('/ranks', (req, res) => {
@@ -26,13 +39,9 @@ module.exports = deps => {
         var user = new User(req.body);
         user.password = hashService.hashValue(user.password);
         user.salt = saltService.getSalt();
-        user.password = hashService.hashValue(`${user.password}${user.salt}`);
-        
-        db.connect(config.db.url);
+        user.password = hashService.hashValue(`${user.password}${user.salt}`);        
            
-        user.save(err => {
-            db.connection.close();
-            
+        user.save(err => {            
             if (err) {
                 if (err.code === 11000) {
                     res.status(409).end();

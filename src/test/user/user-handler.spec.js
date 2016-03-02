@@ -3,6 +3,8 @@ var request = require('supertest');
 var rewire = require('rewire');
 var express = require('express');
 var bodyParser = require('body-parser');
+var auth = require('basic-auth');
+var decryptService = require('../../app/encryption/decrypt-service')({ auth: auth });
 var handler = rewire('../../app/user/user-handler');
 
 describe('user handler', () => {
@@ -25,13 +27,22 @@ describe('user handler', () => {
             getSalt: () => { return '123'; }
         },
         express: express,
-        bodyParser: bodyParser
+        bodyParser: bodyParser,
+        decryptService: decryptService
     }; 
     var MockUser = function User() {
         this.save = callback => {
             callback();
         };
-    };    
+    };
+    MockUser.findOne = (params, callback) => { 
+        if (params.username === 'test@test.com') {
+            var user = { username: 'test', salt: '123', password: '456' };
+            user.toObject = () => { return user; };
+            
+            return callback(null, user);  
+        }
+    };
     
     handler.__set__('User', MockUser);
            
@@ -40,10 +51,25 @@ describe('user handler', () => {
     it('should handle a GET / request', done => {
         request
             .get('/')
+            .set('Authorization', 'Basic dGVzdEB0ZXN0LmNvbTpwdXJwbGU=')
             .expect('Content-Type', /json/)
-            .expect(302, { username: 'test@test.com' })
+            .expect(302, { username: 'test' })
             .end(err => {
                 if (err) return done(err);
+                
+                done(); 
+            });
+    });
+    
+    it('should not return the user object with the salt and password keys', done => {
+        request
+            .get('/')
+            .set('Authorization', 'Basic dGVzdEB0ZXN0LmNvbTpwdXJwbGU=')
+            .end((err, res) => {
+                if (err) return done(err);                
+                
+                expect(res.body.hasOwnProperty('salt')).to.equal(false);
+                expect(res.body.hasOwnProperty('password')).to.equal(false);
                 
                 done(); 
             });
@@ -59,7 +85,7 @@ describe('user handler', () => {
                 
                 done();
             }); 
-    });
+    });        
     
     it('should handle a GET /friends request', done => {
         request
