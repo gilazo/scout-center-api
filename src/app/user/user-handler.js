@@ -22,7 +22,7 @@ module.exports = deps => {
         res.status(302).send([{ username: 'friend@test.com'}]);
     });
     
-    app.post('/', (req, res) => {           
+    app.post('/', (req, res) => {
         var user = new User(req.body);
         user.password = hashService.hashValue(user.password);
         user.salt = saltService.getSalt();
